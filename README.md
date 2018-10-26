@@ -23,7 +23,7 @@ You need to have
 - A developer account at Xero
 - A Demo Company
 
-Go to http://deloper.xero.com to get these.
+Go to http://developer.xero.com to get these.
 
 You also need a Linux computer with outgoing internet access
 
@@ -91,7 +91,7 @@ When the user clicks through the authorisation
 
 A "partner application" is a variety of "public application" which has been specially upgraded by Xero.  You create a public app and then get them to upgrade it.  We don't consider partner apps any further.
 
-##Using Xero Hello World PHP##
+##Using the Private App Hello World##
 
 This project is just the simplest "Hello World" type Xero application,
 using Xero-PHP interface.
@@ -99,6 +99,36 @@ using Xero-PHP interface.
 This is for a "Private Application", which is only used for
 connecting to a single Xero Organisation.  It's the simplest kind
 of app.
+
+git clone https://github.com/jclxx/xero-helloworld-php.git
+cd xero-helloworld-php/
+sudo sh installpackages.sh
+sh createprivapp.sh
+cat secretprivapp/publickey.cer
+
+Now go to https://developer.xero.com/myapps and click "New App" (top right).
+
+- Choose "Private App"
+- Give the App name "Hello World Private" (or whatever you like)
+- Choose Organisation "Demo Company (UK)" (or whatever you like)
+- Copy/paste your certificate into the "Public Key)" (or select file to upload)
+- Accept the conditions and press Create APp
+
+You will see a confirmation page
+- Find the "OAuth 1.0a Credentials" and see the "Consumer key"
+- Click "Copy"
+
+Edit this key into your file:
+nano secretprivapp/consumerkey
+
+composer require calcinai/xero-php
+php xero-privapp-helloworld.php
+
+319  sh showversions.sh 
+  321  sh showversions.sh 
+
+
+
 
 It was tested on freshly installed Ubuntu 18.04.1 LTS Server (64-bit),
 and so if anything doesn't work, you might care to start from there,
