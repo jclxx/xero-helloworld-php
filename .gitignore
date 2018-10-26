@@ -4,5 +4,7 @@
 
 composer.*
 vendor/
+secretprivapp/
+secrepubapp/
 
 # end
