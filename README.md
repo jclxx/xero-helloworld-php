@@ -13,6 +13,7 @@ It contains:
  - Creation scripts for the secrets
  - PHP Scripts for the apps
  - These are command line scripts with much error-checking and no web interfacing whatsoever
+ - Step-by-step instructions.
 
 It has both what Xero calls a Private App and a Public App.
 
@@ -21,11 +22,11 @@ It has both what Xero calls a Private App and a Public App.
 You need to have
 
 - A developer account at Xero
-- A Demo Company
+- A Demo Company organisation at Xero
 
 Go to http://developer.xero.com to get these.
 
-You also need a Linux computer with outgoing internet access
+You also need a Linux computer with outgoing internet access.
 
 - Tested on Ubuntu 18.04.1 LTS server, on VirtualBox
 - Tested on Xubuntu 18.04 desktop
@@ -45,6 +46,9 @@ In these notes
 Apps are registered at your page at https://developer.xero.com/myapps.
 
 Xero apps use Oauth 1.0a to authenticate themselves.
+
+This is an excellent detailed description of how it works.
+https://www.cubrid.org/blog/dancing-with-oauth-understanding-how-authorization-works
 
 ### Private App ###
 
@@ -93,7 +97,7 @@ When the user clicks through the authorisation
 
 A "partner application" is a variety of public application which has been specially upgraded by Xero.  You create a public app and then get them to upgrade it.  We don't consider partner apps any further.
 
-## Using the Private App Hello World ##
+## Installing the Private App ##
 
 This project is just the simplest "Hello World" type Xero application,
 using Xero-PHP interface.
@@ -114,9 +118,16 @@ Now go to https://developer.xero.com/myapps and click "New App" (top right).
 - Give the App name "Hello World Private" (or whatever you like)
 - Choose Organisation "Demo Company (UK)" (or whatever you like)
 - Copy/paste your certificate into the "Public Key)" (or select file to upload)
-- Accept the conditions and press Create APp
+- Accept the conditions and press Create App
 
-You will see a confirmation page
+In confirmation you will see the Xero page for this app.
+
+When you upload the Public Key, you can delete the NAG file:
+
+    rm ./secretprivapp/NAGABOUTKEY
+
+On the Xero app page
+
 - Find the "OAuth 1.0a Credentials" and see the "Consumer key"
 - Click "Copy"
 
@@ -129,108 +140,285 @@ That completes the setup of the Xero Private App at Xero.
 Now get the program running:
 
     composer require calcinai/xero-php
+    
+## Running Private App Hello World ##
+
+Run
+
     php xero-privapp-helloworld.php
 
 Your should see:
 
-It was tested on freshly installed Ubuntu 18.04.1 LTS Server (64-bit),
-and so if anything doesn't work, you might care to start from there,
-on a virtual machine (tested with VirtualBox).
+    connecting to xero private app with consumer key 3A...XI
+    public key certificate fingerprint e2b0059cdf0d45fd1bcd730aa83b8d620efbe37b
+    organisation 1. Name "Demo Company (UK)" Tax Number "GB 123456789"
+    happy ending
 
--Make a directory for your project
--Copy these files into it
+That's the API call authenticating and working, showing the organisation.
 
+If you don't, look at the error and refer to Troubleshooting Private App, below.
 
-sh install.sh
-(give password for sudo if/when prompted)
+## Running Private App Test End Points ##
 
-Now log in at https://developer.xero.com/myapps and create your app
-* Private App
-* App Name: helloworldprivate (or whatever you choose)
-* Organisation: Demo Company (or whichever you choose)
-* Public Key: Paste from clipboard or select contents of secret/publickey.cer)
+There's a longer version of the same program, for seeing the output of many endpoints.
 
-If you already have a suitable private app registered at Xero,
-you can upload your public key to the existing one.
+Run it with:
 
+    php xero-privapp-testendpoints.php 
 
-On the resulting page you will be shown your "Consumer Key"
-* Copy the Consumer Key, a 30-character random string
-* Edited the file secret/consumerkey and paste it in
-* Private applications don't need the "Consumer Secret", ignore it.
+You should see several hundred lines of output, beginning with
 
-Now test
+    connecting to xero private app with consumer key 3A...XI
+    public key certificate fingerprint e2b0059cdf0d45fd1bcd730aa83b8d620efbe37b
+    == 1 'Accounting\Account' ==
+      1. Code="090" Name="Business Bank Account" Class="ASSET"
+      2. Code="091" Name="Business Savings Account" Class="ASSET"
+      3. Code="200" Name="Sales" Class="REVENUE"
 
-$ php xerohwpriv1.php 
-  1. Name "Demo Company (UK)" Tax Number "GB 123456789"
-happy ending
+If you don't, look at the error and refer to Troubleshooting Private App, below.
 
-Troubleshooting
+## Installing the Public App ##
+
+First, make the Private App work, as shown above.  This ensures all the dependencies are met.
+
+Then
+
+    sh createpubapp.sh
+
+Now go to https://developer.xero.com/myapps and click "New App" (top right).
+
+- Choose "Public App"
+- Give the App name "Hello World Public" (or whatever you like)
+- For company URL, give "http://example.com" (or whatever you like)
+- Click "Add an OAuth 1.0a Callback Domain"
+ - Add the domain "localhost" (use this exact domain)
+- Accept the conditions and press Create App
+
+In confirmation you will see the Xero page for this app.
+On the Xero app page look for the OAuth 1.0a Credentials.
+
+- Find the "Consumer key" and click "Copy"
+ - Edit this into the file "secretpubapp/consumerkey"
+- Find the "Consumer secret" and click "Copy"
+ - Edit this into the file "secretpubapp/consumersecret"
+ 
+That completes the setup of the Xero Public App at Xero.
+
+## Running the Public App ##
+
+Run it
+
+    php xero-pubapp-helloworld.php
+    
+You should see
+
+    need to authenticate at xero
+    connecting to xero public app without callback
+      consumer key/secret = E8...A1/E8...A1
+    getting REQUEST token
+    xero sent a request token (PZ...NV:DI...KN)
+    user must now get code from xero:
+      https://api.xero.com/oauth/Authorize?oauth_token=PZMKYAYERQHQ9K9FABCOGUYG1JKXNV
+    waiting for VALIDATION code
+    code from xero: []
+
+Copy and paste the link into your browser to go to Xero's web site.
+If necessary, it will ask you to log in, and they verify that you'd
+like this app to have access to your accounting data.
+
+If you grant the access, you'll be given a numeric code.  Copy and paste it into the program.
+
+    code from xero: 2922483
+    validate code = 2922483
+    getting ACCESS token
+    xero gave us access token (AP...3C:OM...JK, valid 1800 sec)
+    saved creds in ./secretpubapp/SESSION
+    credentials expire 2018-10-26 22:39:17
+
+The program converts the validation code into an access token, which it stores (secretpubapp/SESSION).
+Then it continues and makes some API calls to get information about the Organisatino and the Contacts.
+
+    connecting to xero public app
+    consumer key/secret = E8...A1/F2...HA
+    Organisations
+      1. Name "Demo Company (UK)" Tax Number "GB 123456789"
+    Contacts
+      1. Name "Gable Print"
+      2. Name "Office Supplies Company"
+      3. Name "Wilson Periodicals"
+      4. Name "Fulton Airport Parking"
+      5. Name "Pret A Manger"
+      (and 43 more)
+    happy ending
+
+If you run the program again, it will see that it has credentials (from secretpubapp/SESSION) and not take you through the authentication process.
+
+    already authenticated
+    loaded creds AP...3C:OM...JK from ./secretpubapp/SESSION
+    credentials expire 2018-10-26 22:39:17
+
+## Running the Public App with Callback ##
+
+Instead of getting the validation code and cutting it and pasting it into your program, the normal method is for Xero to do a "callback".  In this method, your program gives a URL to the authentication request, and after the user has granted access, Xero gives you a redirect to the URL the program gave.
+
+    http://localhost/callback?oauth_token=*ACCESSTOKEN*&oauth_verifier=*VERIFICATIONCODE*&org=*ORGID*
+
+For demonstration purposes we don't need to use an actual web site.
+
+Run the public app program again but with a URL (use this exact literal URL)
+
+    rm secretpubapp/SESSION  # this will force another authentication
+    php xero-pubapp-helloworld.php http://localhost/callback
+
+You'll be presented with an Authorize URL, which you cut and paste into the browser as before.
+
+    user must now get code from xero:
+      https://api.xero.com/oauth/Authorize?oauth_token=*TOKEN*
+
+After granting permission at Xero, you will be taken to a http://localhost/callback URL, which will fail because you have no web server on your local computer.
+
+Examine the URL and extract the numeric validation code after oauth_verifier=**1234567**
+
+Copy/paste this into the prompt from the program as before:
+
+waiting for VALIDATION code
+    code from xero: 1234567
+
 
 # https://developer.xero.com/documentation/auth-and-limits/oauth-issues
 
+## Troubleshooting the Private App ##
 
-PRIVATE
+### ERROR: missing composer parts ###
 
-ERROR: missing composer parts
-  did you run "composer require calcinai/xero-php" ?
+If the dependencies aren't there, because you didn't run `composer` or because they have become damaged,
 
-ERROR: ./secretprivapp/consumerkey is missing or empty
-  did you run "sh createprivapp.sh" ?
+    ERROR: missing composer parts
+      did you run "composer require calcinai/xero-php" ?
 
-WARNING: dummy consumer key
-XERO ERROR 401: Consumer key was not recognised
+Fix: run 
 
-WARNING: dummy consumer key
-  expect "Consumer key was not recognised" error from xero
-  fix by copying consumer key from xero app page to ./secretprivapp/consumerkey
-connecting to xero private app with consumer key DU...00
-public key certificate fingerprint b914e9214163bd1c74745dea9716619b6ada61b3
-XERO ERROR 401: Consumer key was not recognised
+    composer require calcinai/xero-php
 
-WARNING: ./secretprivapp/NAGABOUTKEY exists
-  expect "Failed to validate signature" from xero
-  fix by copying ./secretprivapp/publickey.cer to xero app page
-  delete ./secretprivapp/NAGABOUTKEY to remove this warning
-connecting to xero private app with consumer key OQ...HD
-public key certificate fingerprint b914e9214163bd1c74745dea9716619b6ada61b3
-XERO ERROR 401: Failed to validate signature
+### ERROR: ./secretprivapp/consumerkey is missing or empty ###
 
+If you didn't create the file for the consumer key, or it has become damaged
 
-check Public Key Certificate Thumbprint at xero against output
+    ERROR: ./secretprivapp/consumerkey is missing or empty
+      did you run "sh createprivapp.sh" ?
 
+Fix: make the files with
 
-PUB
+    sh createprivapp.sh
 
+### WARNING: dummy consumer key ###
 
-ERROR: ./secretpubapp/consumerkey is missing or empty
-  did you run "sh createpubapp.sh" ?
+If you forget to update secretprivapp/consumerkey from that on the Xero page, the program will warn you.
 
+    WARNING: dummy consumer key
+      expect "Consumer key was not recognised" error from xero
+      fix by copying consumer key from xero app page to ./secretprivapp/consumerkey
 
-WARNING: dummy consumer key
-  expect "Unknown Consumer" error from xero
-  fix by copying consumer key from xero app page to ./secretpubapp/consumerkey
-...
-XERO ERROR 401 (during REQUESTTOKEN): Unknown Consumer (Realm: , Key: DUMMYPUBLICAPPCONSUMERKEY00000)
-Problem: consumer_key_unknown
-  Unknown Consumer (Realm: , Key: DUMMYPUBLICAPPCONSUMERKEY00000)
+### XERO ERROR 401: Consumer key was not recognised ###
 
+If the consumer key doesn't match one at Xero, you need to either copy it from Xero to secretprivapp/consumerkey, or create a new app at Xero.
 
-WARNING: dummy consumer secret
-  expect "Consumer "Failed to validate signature" error from xero
-  fix by copying consumer secret from xero app page to ./secretpubapp/consumerkey
-XERO ERROR 401 (during REQUESTTOKEN): Failed to validate signature
-Problem: signature_invalid
-  Failed to validate signature
+    XERO ERROR 401: Consumer key was not recognised
 
-Means the private key used by this php program doesn't match the
-public key that was uploaded to Xero app page.  Either upload it
-again or recreate the keys and upload it.
+Fix: copy the consumer key from the Xero page to secretprivapp/consumerkey.
 
-XERO ERROR 401 (during ACCESSTOKEN): The consumer was denied access to this resource.
-Problem: permission_denied
-  The consumer was denied access to this resource.
+### WARNING: ./secretprivapp/NAGABOUTKEY exists ###
 
+When the X.509 private key and certificate are made (by createprivapp.sh), it also makes a file `NAGABOUTKEY`, which will nag you about uploading the public key certificate to the Xero app page.
+
+If you don't upload the key, you will also see "Failed to validate signature" errors.  As this error could be caused by many things, we make a NAGABOUTKEY file.
+
+If you definitely uplodoaded the public key but forgot to remove the NAGABOUTKEY file, it will be removed automatically after the first successfull Xero API call, as that won't happen unless the key was uploaded correctly.
+
+    WARNING: ./secretprivapp/NAGABOUTKEY exists
+      expect "Failed to validate signature" from xero
+      fix by copying ./secretprivapp/publickey.cer to xero app page
+      delete ./secretprivapp/NAGABOUTKEY to remove this warning
+
+### XERO ERROR 401: Failed to validate signature ###
+
+If they program can't create the correct signatures, the Xero site will say that the signature isn't validated.  There could be many causes of this, but the most common is that the private key used in the program's requests doesn't match the consumer key and uploaded public key at Xero.
+
+    XERO ERROR 401: Failed to validate signature
+
+Look at the output of xero-privapp-helloworld.php
+
+    connecting to xero private app with consumer key 3A...XI
+    public key certificate fingerprint e2b0059cdf0d45fd1bcd730aa83b8d620efbe37b
+
+Fix: check these against the values shown on the Xero page.  If necessary repeat the steps at "Installing Hello World Private App", above.
+
+## Troubleshooting the Public App ##
+
+### ERROR: ./secretpubapp/consumerkey is missing or empty ###
+
+There is no consumer key file or it's empty.  Probably because you didn't run createpubapp.sh
+
+    ERROR: ./secretpubapp/consumerkey is missing or empty
+      did you run "sh createpubapp.sh" ?
+
+Fix: run the creation script
+
+    sh createpubapp.sh
+
+### WARNING: dummy consumer key ###
+
+When the createpubapp.sh script creates its files, it puts a dummy value for the consumer key.
+
+    WARNING: dummy consumer key
+      expect "Unknown Consumer" error from xero
+      fix by copying consumer key from xero app page to ./secretpubapp/consumerkey
+
+Fix: copy the consumer key from the Xero app page to the file secretpubapp/consumerkey
+
+### XERO ERROR 401 (during REQUESTTOKEN): Unknown Consumer ###
+
+If Xero doesn't recognise the consumer key it doesn't know what app you want.
+
+    XERO ERROR 401 (during REQUESTTOKEN): Unknown Consumer (Realm: , Key: DUMMYPUBLICAPPCONSUMERKEY00000)
+    Problem: consumer_key_unknown
+      Unknown Consumer (Realm: , Key: DUMMYPUBLICAPPCONSUMERKEY00000)
+
+Fix: propertly copy the consumer key from Xero app into secretpubapp/consumerkey
+
+### WARNING: dummy consumer secret ###
+
+When the createpubapp.sh script creates its files, it puts a dummy value for the consumer secret.  If you don't have the correct consumer secret, it will cause an invalid signature error from Xero.
+
+    WARNING: dummy consumer secret
+      expect "Consumer "Failed to validate signature" error from xero
+      fix by copying consumer secret from xero app page to ./secretpubapp/consumerkey
+      
+Fix: copy the consumer secret from Xero app page into secretpubapp/consumersecret
+
+### XERO ERROR 401 (during REQUESTTOKEN): Failed to validate signature ###
+
+This is a general encryption failure, which just means that the program didn't use the correct credentials to encrypt its request.  It can be cause by any number of things, but basically it means the consumer secret in the program doesn't match that from the Xero app page.  The most common reason is that they were not copied from Xero to the file; or copied incorrectly.
+
+    XERO ERROR 401 (during REQUESTTOKEN): Failed to validate signature
+    Problem: signature_invalid
+      Failed to validate signature
+
+Fix: properly copy the consumer secret from the Xero app page to the file secretpubapp/consumersecret
+
+### XERO ERROR 401 (during ACCESSTOKEN): The consumer was denied access to this resource. ###
+
+During the authentication the user is shown a Xero page to grant access to the organisation's accounts, and if granted gives the user a validation code.  If the validation code is no good becuase it's too old, has been used before, belongs to a different request, it was mistyped, or it was just guessed, Xero will deny access.
+
+   XERO ERROR 401 (during ACCESSTOKEN): The consumer was denied access to this resource.
+   Problem: permission_denied
+     The consumer was denied access to this resource.
+  
+Fix: try program again and grant access to a company, carefully copying and pasting the validation code into the program
+
+### XERO ERROR 400 (during REQUESTTOKEN): Bad Request ###
+
+If the program supplies a callback URL to the authorisation request, that URL has to be in the domain which is registered in the Xero app page.
 
 XERO ERROR 400 (during REQUESTTOKEN): Bad Request
 Problem: parameter_rejected
