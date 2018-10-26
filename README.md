@@ -1,6 +1,97 @@
+## Xero Hello World ##
+
+This is about Xero the accounting software and getting your own program running against the Xero API, using the Xero-PHP library.
 
 It can be tricky reading through all the Xero documentation
-to get your first Xero application running.
+to get your first Xero application running.  In particular there are errors at Xero-PHP and the information is not in a single place.
+
+This project has a single goal: **Error free first Xero Applications**
+
+It contains:
+
+ - Installation scripts for all dependencies
+ - Creation scripts for the secrets
+ - PHP Scripts for the apps
+ - These are command line scripts with much error-checking and no web interfacing whatsoever
+
+It has both what Xero calls a Private App and a Public App.
+
+##Getting started##
+
+You need to have
+
+- A developer account at Xero
+- A Demo Company
+
+Go to http://deloper.xero.com to get these.
+
+You also need a Linux computer with outgoing internet access
+
+- Tested on Ubuntu 18.04.1 LTS server, on VirtualBox
+- Tested on Xubuntu 18.04 desktop
+- It is likely to work on many other systems but hasn't been tested
+
+##What is a Xero App##
+
+A Xero app software which interacts with the Xero API, typically for making custom reports from your accounts, or to interface a stock control system to your accounts.
+
+In these notes
+
+- **program** means the code which does something,
+- **app** means the registration of authentication secrets at your Xero developer page
+
+Apps are registered at your page at https://developer.xero.com/myapps.
+
+Xero apps use Oauth 1.0a to authenticate themselves.
+
+###Private App###
+
+There are several kinds of Xero App: "private", "public", and "partner".
+
+A "private application" works with Xero like this:
+
+- You create a X.509 private key and make a certificate
+- You register the app at https://developer.xero.com/myapps
+- You choose which organisation's information is connected to this app
+- Only a single organisations accounts are connected to this app
+- Xero generates a "consumer key", a 30-character unguessable ID for this application
+- You upload the certificate to the app page, which Xero calls the "Public Key"
+- You download the consumer key and tell it to your program
+- When the program runs, it exchanges encrypted information with Xero over its API
+
+The consumer key is just an unguessable identifier for the app, not particularly secret.  You can change the consumer key at any time on the app's page.  (Xero also generates a "consumer secret", but this isn't used at all for a private app.)
+
+The public key is the way that Xero validates requests from the actual program, which signs them with the private key.  You can upload a new public key whenever you like.  (It's not actually a public key, it's a signed certificate.)
+
+There is nothing about what the app actually does here.  It's just about authentication.  You can register an app without any program code at all (obviously it will do nothing), but you do have to have a signed certificate.
+
+###Public Apps###
+
+A "public application" works like this
+
+- You register the app at https://developer.xero.com/myapps
+- Xero generates a "consumer key", a 30-character unguessable ID for this application
+- Xero generates a "consumer secret", a 30-character secret for signing requests
+- You don't need any X.509 keys or certificates
+- When the program runs, it presents a one-time URL to the user at https://api.xero.com/oauth/Authorize?...
+- The user clicks through and has to log in
+- The user grants (or doesn't) access to a given organisations's accounts
+- Xero gives you a magic validation number (currently 7-digit)
+- The user inputs the validation code into your program
+- Your program converts the validation code into an access token
+- Now your program can make API calls and find out details from the accounts
+
+There are two methods for Xero to give you the validation code, chosen by your program.
+
+When the user clicks through the authorisation
+- Xero presents a page saying "Enter this code in *appname* to finish the process", or
+- Xero redirects to a a "callback URL" which you choose, and it makes a GET request with oauth_verifier=*magicnumber*
+
+##Partner Apps##
+
+A "partner application" is a variety of "public application" which has been specially upgraded by Xero.  You create a public app and then get them to upgrade it.  We don't consider partner apps any further.
+
+##Using Xero Hello World PHP##
 
 This project is just the simplest "Hello World" type Xero application,
 using Xero-PHP interface.
@@ -13,8 +104,10 @@ It was tested on freshly installed Ubuntu 18.04.1 LTS Server (64-bit),
 and so if anything doesn't work, you might care to start from there,
 on a virtual machine (tested with VirtualBox).
 
-Make a directory for your project
-Copy these files into it
+-Make a directory for your project
+-Copy these files into it
+
+
 sh install.sh
 (give password for sudo if/when prompted)
 
