@@ -58,8 +58,6 @@ Go to https://developer.xero.com/myapps and create "New App"
 * Copy the `publickey.cer` contents, paste into Xero page
 * Copy the "consumer key" from Xero page into `secretprivapp/consumerkey`
 
-    nano secretprivapp/consumerkey 
-
 Now run:
 
     php xero-privapp-helloworld.php 
@@ -71,16 +69,6 @@ See result:
     organisation 1. Name "Demo Company (UK)" Tax Number "GB 123456789"
     happy ending
 
-These are known to work:
-
-    == versions of required parts ==
-      Linux 4.15.0-29-generic x86_64
-      Ubuntu "18.04.1 LTS (Bionic Beaver)"
-      PHP 7.2.10-0ubuntu0.18.04.1
-      OpenSSL 1.1.0g
-      curl 7.58.0
-      Composer 1.6.3
-      calcinai/xero-php v1.8.3
 
 Now run
 
@@ -126,6 +114,20 @@ See output:
       5. Name "Pret A Manger"
       (and 43 more)
     happy ending
+
+## Known Good Version ##
+
+These are known to work:
+
+    sh showversions.sh
+    == versions of required parts ==
+      Linux 4.15.0-29-generic x86_64
+      Ubuntu "18.04.1 LTS (Bionic Beaver)"
+      PHP 7.2.10-0ubuntu0.18.04.1
+      OpenSSL 1.1.0g
+      curl 7.58.0
+      Composer 1.6.3
+      calcinai/xero-php v1.8.3
 
 ## Introduction ##
 
