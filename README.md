@@ -395,7 +395,7 @@ and paste it into the program.
     credentials expire 2018-10-26 22:39:17
 
 The program converts the validation code into an access token,
-which it stores (secretpubapp/SESSION`).  Then it continues and
+which it stores (`secretpubapp/SESSION`).  Then it continues and
 makes some API calls to get information about the Organisation
 and the Contacts.
 
@@ -422,7 +422,7 @@ through the authentication process.
 
 To log the program out from Xero, just delete the session information:
 
-   rm secretpubapp/SESSION
+    rm secretpubapp/SESSION
 
 Note that the information in the `SESSION` is secret: for a real
 organisation this would give access to the organisations accounts.
@@ -676,6 +676,6 @@ key is required which means new authentication is required.
 
     XERO ERROR 401: The access token has expired
 
-Fix: remove secretpubapp/SESSION and retry.
+Fix: remove `secretpubapp/SESSION` and retry.
 
 (end)
