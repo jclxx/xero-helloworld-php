@@ -1,4 +1,4 @@
-## Xero Hello World ##
+# Xero Hello World #
 
 This is about Xero the accounting software and getting your own program running against the Xero API, using the Xero-PHP library.
 
@@ -16,7 +16,7 @@ It contains:
 
 It has both what Xero calls a Private App and a Public App.
 
-##Getting started##
+## Getting started ##
 
 You need to have
 
@@ -31,7 +31,9 @@ You also need a Linux computer with outgoing internet access
 - Tested on Xubuntu 18.04 desktop
 - It is likely to work on many other systems but hasn't been tested
 
-##What is a Xero App##
+These notes were tested on freshly installed systems.  If you find errors running, you might try a new virtual computer and install from there.
+
+## What is a Xero App? ##
 
 A Xero app software which interacts with the Xero API, typically for making custom reports from your accounts, or to interface a stock control system to your accounts.
 
@@ -44,7 +46,7 @@ Apps are registered at your page at https://developer.xero.com/myapps.
 
 Xero apps use Oauth 1.0a to authenticate themselves.
 
-###Private App###
+### Private App ###
 
 There are several kinds of Xero App: "private", "public", and "partner".
 
@@ -65,7 +67,7 @@ The public key is the way that Xero validates requests from the actual program, 
 
 There is nothing about what the app actually does here.  It's just about authentication.  You can register an app without any program code at all (obviously it will do nothing), but you do have to have a signed certificate.
 
-###Public Apps###
+### Public Apps ###
 
 A "public application" works like this
 
@@ -87,11 +89,11 @@ When the user clicks through the authorisation
 - Xero presents a page saying "Enter this code in *appname* to finish the process", or
 - Xero redirects to a a "callback URL" which you choose, and it makes a GET request with oauth_verifier=*magicnumber*
 
-##Partner Apps##
+## Partner Apps ##
 
-A "partner application" is a variety of "public application" which has been specially upgraded by Xero.  You create a public app and then get them to upgrade it.  We don't consider partner apps any further.
+A "partner application" is a variety of public application which has been specially upgraded by Xero.  You create a public app and then get them to upgrade it.  We don't consider partner apps any further.
 
-##Using the Private App Hello World##
+## Using the Private App Hello World ##
 
 This project is just the simplest "Hello World" type Xero application,
 using Xero-PHP interface.
@@ -100,11 +102,11 @@ This is for a "Private Application", which is only used for
 connecting to a single Xero Organisation.  It's the simplest kind
 of app.
 
-git clone https://github.com/jclxx/xero-helloworld-php.git
-cd xero-helloworld-php/
-sudo sh installpackages.sh
-sh createprivapp.sh
-cat secretprivapp/publickey.cer
+    git clone https://github.com/jclxx/xero-helloworld-php.git
+    cd xero-helloworld-php/
+    sudo sh installpackages.sh
+    sh createprivapp.sh
+    cat secretprivapp/publickey.cer
 
 Now go to https://developer.xero.com/myapps and click "New App" (top right).
 
@@ -119,16 +121,17 @@ You will see a confirmation page
 - Click "Copy"
 
 Edit this key into your file:
-nano secretprivapp/consumerkey
 
-composer require calcinai/xero-php
-php xero-privapp-helloworld.php
+    nano secretprivapp/consumerkey
 
-319  sh showversions.sh 
-  321  sh showversions.sh 
+That completes the setup of the Xero Private App at Xero.
 
+Now get the program running:
 
+    composer require calcinai/xero-php
+    php xero-privapp-helloworld.php
 
+Your should see:
 
 It was tested on freshly installed Ubuntu 18.04.1 LTS Server (64-bit),
 and so if anything doesn't work, you might care to start from there,
