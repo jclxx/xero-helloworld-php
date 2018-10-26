@@ -220,7 +220,7 @@ A "public application" works like this
 * You don't need any X.509 keys or certificates
 * When the program runs, it presents a one-time URL to the user at `https://api.xero.com/oauth/Authorize?...`
 * The user clicks through and has to log in
-* The user grants (or doesn't) access to a given organisations's accounts
+* The user grants (or doesn't) access to a given organisation's accounts
 * Xero gives you a numeric validation number
 * The user inputs the validation code into your program
 * Your program converts the validation code into an access token
@@ -382,7 +382,7 @@ organisations (perhaps several companies) you choose one to grant
 access to.
 
 WARNING: DO NOT GRANT ACCESS TO A REAL ORGANISATION.
-ONLY USE THE "DEMO COMPANY".  Seriously.
+ONLY USE THE "DEMO COMPANY".  Seriously, it's financial information.
 
 If you grant the access, you'll be given a numeric code.  Copy
 and paste it into the program.
@@ -425,7 +425,8 @@ To log the program out from Xero, just delete the session information:
     rm secretpubapp/SESSION
 
 Note that the information in the `SESSION` is secret: for a real
-organisation this would give access to the organisations accounts.
+organisation this would give access to the organisation's
+financial accounts.  Be careful.
 
 ## Running the Public App with Callback ##
 
