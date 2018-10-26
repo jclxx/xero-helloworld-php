@@ -21,8 +21,7 @@ It contains:
 * Step-by-step instructions starting from newly-installed operating system.
 * Installation scripts for all dependencies
 * Creation scripts for the secrets and keys
-* PHP Scripts for the apps
-* Command line scripts with much error-checking
+* Programs are command line PHP scripts with much error-checking
 * No web interfacing whatsoever
 * Detailed descriptions of every error that could be found
 
