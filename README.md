@@ -99,7 +99,8 @@ Copy the output URL:
 
     https://api.xero.com/oauth/Authorize?oauth_token=*TOKEN*
 
-Paste into browser, grant access, see numeric validation code:
+Paste into browser, grant access to Demo Company (DO NOT USE REAL COMPANY).
+See numeric validation code:
 
     code from xero: [type validation code here]
 
