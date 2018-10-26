@@ -54,6 +54,7 @@ Install like this:
 Go to https://developer.xero.com/myapps and create "New App"
 
 * Must be type "Private App"
+* Choose "Demo Company" **DO NOT USE REAL COMPANY**
 * Copy the `publickey.cer` contents, paste into Xero page
 * Copy the "consumer key" from Xero page into `secretprivapp/consumerkey`
 
@@ -146,6 +147,9 @@ You also need a Linux computer with outgoing internet access.
 These notes were tested on freshly installed systems.  If you
 find errors running, you might try a new virtual computer
 and install from there.
+
+All of this was done with Xero's UK offering.  It has not been
+tested yet against the other countries' systems.
 
 ## What is a Xero App? ##
 
