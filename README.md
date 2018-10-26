@@ -104,15 +104,15 @@ Go to https://developer.xero.com/myapps and create "New App"
 
 Run
 
-   php xero-pubapp-helloworld.php 
+    php xero-pubapp-helloworld.php 
 
 Copy the output URL:
 
-  https://api.xero.com/oauth/Authorize?oauth_token=*TOKEN*
+    https://api.xero.com/oauth/Authorize?oauth_token=*TOKEN*
 
-Paste into browser, grant access, see numeric validation code
+Paste into browser, grant access, see numeric validation code:
 
-    code from xero: 1234567
+    code from xero: [type validation code here]
 
 See output:
 
