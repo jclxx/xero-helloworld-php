@@ -1,21 +1,25 @@
 # Xero Hello World #
 
-This is about Xero the accounting software and getting your own program running against the Xero API, using the Xero-PHP library.
+This is about **Xero accounting software** and getting your own program running against the Xero API, using the **Xero-PHP library** from Calcinai.
 
-It can be tricky reading through all the Xero documentation
-to get your first Xero application running.  In particular there are errors at Xero-PHP and the information is not in a single place.
+- The documentation is difficult to follow
+- It's not in one place
+- There are many errors
 
 This project has a single goal: **Error free first Xero Applications**
 
 It contains:
 
- - Installation scripts for all dependencies
- - Creation scripts for the secrets
- - PHP Scripts for the apps
- - These are command line scripts with much error-checking and no web interfacing whatsoever
- - Step-by-step instructions.
+- Step-by-step instructions starting from newly-installed operating system.
+- Installation scripts for all dependencies
+- Creation scripts for the secrets and keys
+- PHP Scripts for the apps
+- Command line scripts with much error-checking and no web interfacing whatsoever
+- Detailed descriptions of every error that could be found
 
 It has both what Xero calls a Private App and a Public App.
+
+It starts assuming you have nothing installed, not even PHP.
 
 ## Getting started ##
 
@@ -36,7 +40,7 @@ These notes were tested on freshly installed systems.  If you find errors runnin
 
 ## What is a Xero App? ##
 
-A Xero app software which interacts with the Xero API, typically for making custom reports from your accounts, or to interface a stock control system to your accounts.
+A Xero app is software which interacts with the Xero API, typically for making custom reports from your accounts, or to interface a stock control system to your accounts.
 
 In these notes
 
@@ -47,8 +51,7 @@ Apps are registered at your page at https://developer.xero.com/myapps.
 
 Xero apps use Oauth 1.0a to authenticate themselves.
 
-This is an excellent detailed description of how it works.
-https://www.cubrid.org/blog/dancing-with-oauth-understanding-how-authorization-works
+
 
 ### Private App ###
 
@@ -236,7 +239,7 @@ If you grant the access, you'll be given a numeric code.  Copy and paste it into
     credentials expire 2018-10-26 22:39:17
 
 The program converts the validation code into an access token, which it stores (secretpubapp/SESSION).
-Then it continues and makes some API calls to get information about the Organisatino and the Contacts.
+Then it continues and makes some API calls to get information about the Organisation and the Contacts.
 
     connecting to xero public app
     consumer key/secret = E8...A1/F2...HA
@@ -256,6 +259,10 @@ If you run the program again, it will see that it has credentials (from secretpu
     already authenticated
     loaded creds AP...3C:OM...JK from ./secretpubapp/SESSION
     credentials expire 2018-10-26 22:39:17
+
+To log the program out from Xero, just delete the session information:
+
+   rm secretpubapp/SESSION
 
 ## Running the Public App with Callback ##
 
@@ -281,11 +288,19 @@ Examine the URL and extract the numeric validation code after oauth_verifier=**1
 
 Copy/paste this into the prompt from the program as before:
 
-waiting for VALIDATION code
+    waiting for VALIDATION code
     code from xero: 1234567
 
+Note that the URL is resolved by the browser, which means that you can pass through internal resources which are not accessible to Xero or the wider internet.  So `https://localhost/thing` is resolved to the browsing computer, not Xero's server.
 
-# https://developer.xero.com/documentation/auth-and-limits/oauth-issues
+Xero explains the details of the callback URL here:
+
+* https://developer.xero.com/documentation/auth-and-limits/oauth-callback-domains-explained
+
+## Links ##
+
+* Excellent description of how OAuth works [link](https://www.cubrid.org/blog/dancing-with-oauth-understanding-how-authorization-works)
+* Description of Xero's use of OAuth [link](https://developer.xero.com/documentation/auth-and-limits/oauth-issues)
 
 ## Troubleshooting the Private App ##
 
@@ -400,6 +415,8 @@ Fix: copy the consumer secret from Xero app page into secretpubapp/consumersecre
 
 This is a general encryption failure, which just means that the program didn't use the correct credentials to encrypt its request.  It can be cause by any number of things, but basically it means the consumer secret in the program doesn't match that from the Xero app page.  The most common reason is that they were not copied from Xero to the file; or copied incorrectly.
 
+Note that immediately after changing a public key certificate, it takes about 10 seconds for the key to be work and up to about 30 seconds for all of Xero's servers to know about it.  You can find interspersed success and failures from one API call to the next, presumably because different internal servers are handling the requests, and they have not yet all been updated.
+
     XERO ERROR 401 (during REQUESTTOKEN): Failed to validate signature
     Problem: signature_invalid
       Failed to validate signature
@@ -424,6 +441,16 @@ XERO ERROR 400 (during REQUESTTOKEN): Bad Request
 Problem: parameter_rejected
   Callback url is not in the registered callback domain
 
+Fix: ensure that the URL passed into the program is in the domain from the Xero app's page.
 
+See: https://developer.xero.com/documentation/auth-and-limits/oauth-callback-domains-explained
+
+### XERO ERROR 401: The access token has expired ###
+
+The grant of access by the user is only valid for a period of time, currently 30 minutes.  After 30 minutes, a new access key is required which means new authentication is required.
+
+    XERO ERROR 401: The access token has expired
+
+Fix: remove secretpubapp/SESSION and retry.
 
 (end)
