@@ -53,9 +53,10 @@ Install like this:
     cat secretprivapp/publickey.cer 
 
 Go to https://developer.xero.com/myapps and create "New App"
-Must be type "Private App"
-Copy the `publickey.cer` contents, paste into Xero page
-Copy the "consumer key" from Xero page into `secretprivapp/consumerkey`
+
+* Must be type "Private App"
+* Copy the `publickey.cer` contents, paste into Xero page
+* Copy the "consumer key" from Xero page into `secretprivapp/consumerkey`
 
     nano secretprivapp/consumerkey 
 
@@ -96,9 +97,10 @@ Now
     sh createpubapp.sh 
 
 Go to https://developer.xero.com/myapps and create "New App"
-Must be type "Public App"
-Copy the "consumer key" from Xero page into `secretprivapp/consumerkey`
-Copy the "consumer secret" from Xero page into `secretprivapp/consumersecret`
+
+* Must be type "Public App"
+* Copy the "consumer key" from Xero page into `secretprivapp/consumerkey`
+* Copy the "consumer secret" from Xero page into `secretprivapp/consumersecret`
 
 Run
 
