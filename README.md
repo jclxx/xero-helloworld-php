@@ -224,7 +224,8 @@ A "public application" works like this
 There are two methods for Xero to give you the validation code,
 chosen by your program.
 
-When the user clicks through the authorisation
+When the user clicks through the authorisation, either
+
 * Xero shows you a page with the validate code
 * Xero redirects to a a "callback URL" which you choose, and it makes a GET request with `oauth_verifier=*magicnumber*`
 
@@ -256,10 +257,10 @@ of app.
 Now go to https://developer.xero.com/myapps and click "New App" (top right).
 
 * Choose "Private App"
-* Give the App name "Hello World Private" (or whatever you like)
-* Choose Organisation "Demo Company (UK)" (or whatever you like)
+* Give the App name `Hello World Private` (or whatever you like)
+* Choose Organisation `Demo Company (UK)` (or whatever you like)
 * DO NOT USE A REAL ORGANISATION ACCOUNTS
-* Copy/paste your certificate into the "Public Key)" (or select file to upload)
+* Copy/paste your certificate into the "Public Key" (or select file to upload)
 * Accept the conditions and press Create App
 
 In confirmation you will see the Xero page for this app.
@@ -304,7 +305,8 @@ If you get an error, refer to Troubleshooting Private App, below.
 
 ## Running Private App Test End Points ##
 
-There's a longer version of the same program, for seeing the output of many endpoints.
+There's a longer version of the same program, for seeing the
+output of many different endpoints.
 
 Run it with:
 
@@ -334,19 +336,19 @@ Now create the Public App
 
 * Go to https://developer.xero.com/myapps and click "New App" (top right).
 * Choose "Public App"
-* Give the App name "Hello World Public" (or whatever you like)
-* For company URL, give "http://example.com" (or whatever you like)
+* Give the App name `Hello World Public` (or whatever you like)
+* For company URL, give `http://example.com` (or whatever you like)
 * Click "Add an OAuth 1.0a Callback Domain"
- * Add the domain "localhost" (use this exact domain)
+* Add the domain `localhost` (use this exact domain)
 * Accept the conditions and press Create App
 
 In confirmation you will see the Xero page for this app.
 On the Xero app page look for the OAuth 1.0a Credentials.
 
 * Find the "Consumer key" and click "Copy"
- * Edit this into the file "secretpubapp/consumerkey"
+* Edit this into the file `secretpubapp/consumerkey`
 * Find the "Consumer secret" and click "Copy"
- * Edit this into the file "secretpubapp/consumersecret"
+* Edit this into the file `secretpubapp/consumersecret`
  
 That completes the setup of the Xero Public App at Xero.
 
@@ -374,7 +376,7 @@ organisations (perhaps several companies) you choose one to grant
 access to.
 
 WARNING: DO NOT GRANT ACCESS TO A REAL ORGANISATION.
-ONLY USE THE "DEMO COMPANY"
+ONLY USE THE "DEMO COMPANY".  Seriously.
 
 If you grant the access, you'll be given a numeric code.  Copy
 and paste it into the program.
@@ -387,7 +389,7 @@ and paste it into the program.
     credentials expire 2018-10-26 22:39:17
 
 The program converts the validation code into an access token,
-which it stores (secretpubapp/SESSION).  Then it continues and
+which it stores (secretpubapp/SESSION`).  Then it continues and
 makes some API calls to get information about the Organisation
 and the Contacts.
 
@@ -405,7 +407,7 @@ and the Contacts.
     happy ending
 
 If you run the program again, it will see that it has
-credentials (from secretpubapp/SESSION) and not take you
+credentials (from `secretpubapp/SESSION`) and not take you
 through the authentication process.
 
     already authenticated
@@ -416,7 +418,7 @@ To log the program out from Xero, just delete the session information:
 
    rm secretpubapp/SESSION
 
-Note that the information in the SESSION is secret: for a real
+Note that the information in the `SESSION` is secret: for a real
 organisation this would give access to the organisations accounts.
 
 ## Running the Public App with Callback ##
