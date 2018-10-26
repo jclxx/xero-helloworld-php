@@ -85,7 +85,8 @@ Now
 
 Go to https://developer.xero.com/myapps and create "New App"
 
-* Must be type "Public App"
+* Must be type "Public App"; any App name
+* Company or app URL, put `https://example.com`
 * Copy the "consumer key" from Xero page into `secretprivapp/consumerkey`
 * Copy the "consumer secret" from Xero page into `secretprivapp/consumersecret`
 
@@ -114,7 +115,7 @@ See output:
       (and 43 more)
     happy ending
 
-## Known Good Version ##
+## Known Good Versions ##
 
 These are known to work:
 
