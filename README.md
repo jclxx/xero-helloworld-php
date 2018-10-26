@@ -186,11 +186,11 @@ A "private application" works with Xero like this:
 * You choose which organisation's information is connected to this app
 * Only a single organisation's accounts are connected to this app
 * Xero generates a "consumer key", a 30-character ID for this application
-* You upload the certificate to the app page, which Xero confusingly calls the "Public Key"
+* You upload the certificate to the app page
 * You download the consumer key and tell it to your program
 * When the program runs, it says which app it wants with the
 consumer key, and encrypts it with the private key
-* Xero sees which app is required, and checks the validity of the sender by checking the transmitted information with the public key
+* Xero sees which app is required, and checks the validity of the sender by checking the transmitted information with the public key certificate
 
 The consumer key is just an unguessable identifier for the app,
 not particularly secret.  You can change the consumer key at any
@@ -199,11 +199,10 @@ laptop from seeing your accounts.  (Xero also generates a different
 thing called the "consumer secret", but this isn't used at all for
 a private app.)
 
-The public key is the way that Xero validates requests from
+The public key certificate is the way that Xero validates requests from
 the actual program, which signs them with the private key.
-You can upload a new public key whenever you like.  (Despite Xero's
-usage, it's not actually a public key, it's a signed certificate.)
-Again, if you create a new key and make a new certificate and upload
+You can upload a new public key certificate whenever you like.
+Again, if you create a new key pair and make a new certificate and upload
 it, that will prevent anyone who has the old key from accessing
 your organisation's data.
 
