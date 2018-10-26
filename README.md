@@ -474,6 +474,7 @@ Xero explains the details of the callback URL here:
 
 ## Links ##
 
+* Description of Accounting API [link](https://developer.xero.com/documentation/api/api-overview)
 * Excellent description of how OAuth works [link](https://www.cubrid.org/blog/dancing-with-oauth-understanding-how-authorization-works)
 * Description of Xero's use of OAuth [link](https://developer.xero.com/documentation/auth-and-limits/oauth-issues)
 * Description of callbacks [link](https://developer.xero.com/documentation/auth-and-limits/oauth-callback-domains-explained)
