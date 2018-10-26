@@ -1,0 +1,8 @@
+# .gitignore
+# what omit from git
+# jcl/jclxx/2018-10-26
+
+composer.*
+vendor/
+
+# end
