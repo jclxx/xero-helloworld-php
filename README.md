@@ -471,7 +471,7 @@ is resolved to the browsing computer, not Xero's server.
 
 Xero explains the details of the callback URL here:
 
-## Links ##
+## Documentation Links ##
 
 * Description of Accounting API [link](https://developer.xero.com/documentation/api/api-overview)
 * Description of rate limiting etc [link](https://developer.xero.com/documentation/auth-and-limits/xero-api-limits)
