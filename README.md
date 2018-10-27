@@ -474,6 +474,7 @@ Xero explains the details of the callback URL here:
 ## Links ##
 
 * Description of Accounting API [link](https://developer.xero.com/documentation/api/api-overview)
+* Description of rate limiting etc [link](https://developer.xero.com/documentation/auth-and-limits/xero-api-limits)
 * Excellent description of how OAuth works [link](https://www.cubrid.org/blog/dancing-with-oauth-understanding-how-authorization-works)
 * Description of Xero's use of OAuth [link](https://developer.xero.com/documentation/auth-and-limits/oauth-issues)
 * Description of callbacks [link](https://developer.xero.com/documentation/auth-and-limits/oauth-callback-domains-explained)
@@ -576,6 +577,15 @@ private key will no longer match anything.
     XERO ERROR 401: The access token has not been authorized, or has been revoked by the user
 
 Fix: recreate the app at Xero.
+
+### XERO ERROR 503: The API rate limit for your organisation/application pairing has been exceeded.
+ ###
+
+    XERO ERROR 503: The API rate limit for your organisation/application pairing has been exceeded.
+
+If you send too many API calls, you can get an error.
+
+Fix: wait 60 seconds before sending more API calls.
 
 ## Troubleshooting the Public App ##
 
